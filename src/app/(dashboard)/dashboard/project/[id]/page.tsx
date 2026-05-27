@@ -178,10 +178,10 @@ export default function ProjectDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-12">
       {/* Top Navigation & Details */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex gap-4">
           <Link
             href="/dashboard/projects"
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 dark:border-white/5 bg-white dark:bg-keyra-navy/50 text-slate-400 dark:text-keyra-text/50 hover:text-slate-900 dark:hover:text-white transition-colors"

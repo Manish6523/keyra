@@ -243,7 +243,15 @@ export function KeyCard({ keyData, onEdit, onDelete }: KeyCardProps) {
                 )}
               </div>
             </div>
-
+            <div>
+              {keyData.description && (
+                <div className="mt-4">
+                  <span className="flex-1 truncate text-sm font-mono text-slate-600 dark:text-keyra-text/60">
+                    {keyData.description}
+                  </span>
+                </div>
+              )}
+            </div>
             <div className="mt-4">
               <div className="flex items-center gap-2 rounded-lg bg-slate-50 dark:bg-keyra-charcoal/50 border border-slate-100 dark:border-transparent px-3 py-2 font-mono text-xs text-slate-600 dark:text-keyra-text/60">
                 <span className="flex-1 truncate font-mono">
