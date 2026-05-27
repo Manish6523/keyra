@@ -69,7 +69,7 @@ export default function SandboxPage() {
         "sk-live-YOUR_KEYRA_SECRET_KEY",
         "DATABASE_URL=postgresql://keyra_owner:YOUR_KEYRA_DATABASE_PASSWORD@ep-fancy-flower.us-east-1.aws.neon.tech/keyra",
         "JWT_SECRET=YOUR_KEYRA_JWT_SECRET_KEY",
-        "SECRET_KEY=YOUR_KEYRA_SECRET_KEY", 
+        "SECRET_KEY=YOUR_KEYRA_SECRET_KEY",
       ];
       const randomIdx = Math.floor(Math.random() * phrases.length);
       setPlaintext(phrases[randomIdx]);
