@@ -112,6 +112,9 @@ function DashboardContent() {
       return true;
     })
     .filter((k) => {
+      if (filterProject === "__root__") {
+        return !k.projectId || k.projectId === "";
+      }
       if (filterProject && filterProject !== "all") {
         return k.projectId === filterProject;
       }
@@ -255,6 +258,7 @@ function DashboardContent() {
                 }
                 options={[
                   { value: "all", label: "All Projects" },
+                  { value: "__root__", label: "🔑 Root Keys (Ungrouped)" },
                   ...projects.map((p) => ({ value: p.id, label: p.name })),
                 ]}
                 className="w-44"

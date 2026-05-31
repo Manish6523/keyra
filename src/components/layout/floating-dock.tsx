@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
+import gsap from "gsap";
 
 const navLinks = [
   { href: "/dashboard", label: "All Keys", icon: Key },
@@ -30,6 +31,31 @@ export function FloatingDock() {
   const { user, signOut } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const dockRef = useRef<HTMLDivElement>(null);
+
+  // GSAP entrance animation
+  useEffect(() => {
+    if (!dockRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(dockRef.current, {
+        x: -80,
+        opacity: 0,
+        duration: 0.7,
+        ease: "back.out(1.4)",
+        delay: 0.3,
+      });
+    }, dockRef);
+    return () => ctx.revert();
+  }, []);
+
+  // macOS-style magnification: compute scale for each icon based on distance from hovered
+  const getIconScale = (idx: number) => {
+    if (hoveredIndex === null) return 1;
+    const distance = Math.abs(idx - hoveredIndex);
+    if (distance === 0) return 1.25;
+    if (distance === 1) return 1.1;
+    return 1;
+  };
 
   const handleSignOut = async () => {
     try {
@@ -41,9 +67,10 @@ export function FloatingDock() {
 
   return (
     <motion.div
+      ref={dockRef}
       animate={{ width: isCollapsed ? "64px" : "200px" }}
       transition={{ type: "spring", stiffness: 220, damping: 26 }}
-      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col h-[85vh] bg-white/70 dark:bg-keyra-navy/70 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xl shadow-slate-900/5 dark:shadow-black/40 py-4 px-3 overflow-hidden select-none transition-colors"
+      className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col h-[85vh] bg-white/70 dark:bg-keyra-navy/70 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xl shadow-slate-900/5 dark:shadow-black/40 py-4 px-3 overflow-hidden select-none transition-colors dock-gradient-border"
     >
       {/* Brand logo or icon */}
       <div className="flex items-center gap-3 px-1 mb-6 h-10">
@@ -94,7 +121,10 @@ export function FloatingDock() {
                     transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                   />
                 )}
-                <div className="min-w-[20px] flex justify-center items-center">
+                <div
+                  className="min-w-[20px] flex justify-center items-center transition-transform duration-200"
+                  style={{ transform: `scale(${getIconScale(idx)})` }}
+                >
                   <Icon className="h-5 w-5" />
                 </div>
                 <AnimatePresence>

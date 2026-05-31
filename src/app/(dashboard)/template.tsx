@@ -1,20 +1,42 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
 
 export default function DashboardTemplate({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ref.current,
+        {
+          opacity: 0,
+          y: 16,
+          filter: "blur(6px)",
+        },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.45,
+          ease: "power3.out",
+        }
+      );
+    }, ref);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className="w-full h-full"
-    >
+    <div ref={ref} className="w-full h-full">
       {children}
-    </motion.div>
+    </div>
   );
 }
