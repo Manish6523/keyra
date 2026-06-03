@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "Store, organize, and access all your API keys in one encrypted vault. Zero-knowledge. Zero leaks. Built for developers who take security seriously.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.ico",
   },
 }
 
