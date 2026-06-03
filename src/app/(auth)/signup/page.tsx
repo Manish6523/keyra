@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import { Key, MailCheck } from "lucide-react";
 import { AuroraBackground } from "@/components/landing/aurora-background";
 import { FloatingParticles } from "@/components/landing/floating-particles";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -23,87 +24,81 @@ export default function SignupPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!formRef.current || success) return;
-    const ctx = gsap.context(() => {
-      gsap.from(".signup-logo", {
-        opacity: 0,
-        scale: 0.5,
-        y: -20,
-        duration: 0.7,
-        ease: "back.out(1.7)",
-        delay: 0.2,
-      });
-      gsap.from(".signup-subtitle", {
-        opacity: 0,
-        y: 10,
-        filter: "blur(8px)",
-        duration: 0.6,
-        ease: "power3.out",
-        delay: 0.5,
-      });
-      gsap.from(".signup-card", {
-        opacity: 0,
-        y: 30,
-        scale: 0.97,
-        duration: 0.7,
-        ease: "power3.out",
-        delay: 0.7,
-      });
-      gsap.from(".signup-field", {
-        opacity: 0,
-        x: -15,
-        duration: 0.5,
-        stagger: 0.12,
-        ease: "power2.out",
-        delay: 1.0,
-      });
-      gsap.from(".signup-submit", {
-        opacity: 0,
-        y: 10,
-        duration: 0.5,
-        ease: "power2.out",
-        delay: 1.4,
-      });
-    }, formRef);
-    return () => ctx.revert();
-  }, [success]);
+  useGSAP(() => {
+    if (success) return;
+    gsap.from(".signup-logo", {
+      opacity: 0,
+      scale: 0.5,
+      y: -20,
+      duration: 0.7,
+      ease: "back.out(1.7)",
+      delay: 0.2,
+    });
+    gsap.from(".signup-subtitle", {
+      opacity: 0,
+      y: 10,
+      filter: "blur(8px)",
+      duration: 0.6,
+      ease: "power3.out",
+      delay: 0.5,
+    });
+    gsap.from(".signup-card", {
+      opacity: 0,
+      y: 30,
+      scale: 0.97,
+      duration: 0.7,
+      ease: "power3.out",
+      delay: 0.7,
+    });
+    gsap.from(".signup-field", {
+      opacity: 0,
+      x: -15,
+      duration: 0.5,
+      stagger: 0.12,
+      ease: "power2.out",
+      delay: 1.0,
+    });
+    gsap.from(".signup-submit", {
+      opacity: 0,
+      y: 10,
+      duration: 0.5,
+      ease: "power2.out",
+      delay: 1.4,
+    });
+  }, { scope: formRef, dependencies: [success] });
 
   // Success state entrance
-  useEffect(() => {
-    if (!success || !successRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.from(".success-icon", {
-        scale: 0,
-        rotation: -180,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-        delay: 0.2,
-      });
-      gsap.from(".success-title", {
-        opacity: 0,
-        y: 15,
-        duration: 0.6,
-        ease: "power3.out",
-        delay: 0.5,
-      });
-      gsap.from(".success-desc", {
-        opacity: 0,
-        y: 10,
-        duration: 0.5,
-        ease: "power3.out",
-        delay: 0.7,
-      });
-      gsap.from(".success-btn", {
-        opacity: 0,
-        y: 10,
-        duration: 0.5,
-        ease: "power3.out",
-        delay: 0.9,
-      });
-    }, successRef);
-    return () => ctx.revert();
-  }, [success]);
+  useGSAP(() => {
+    if (!success) return;
+    gsap.from(".success-icon", {
+      scale: 0,
+      rotation: -180,
+      duration: 0.8,
+      ease: "back.out(1.7)",
+      delay: 0.2,
+    });
+    gsap.from(".success-title", {
+      opacity: 0,
+      y: 15,
+      duration: 0.6,
+      ease: "power3.out",
+      delay: 0.5,
+    });
+    gsap.from(".success-desc", {
+      opacity: 0,
+      y: 10,
+      duration: 0.5,
+      ease: "power3.out",
+      delay: 0.7,
+    });
+    gsap.from(".success-btn", {
+      opacity: 0,
+      y: 10,
+      duration: 0.5,
+      ease: "power3.out",
+      delay: 0.9,
+    });
+  }, { scope: successRef, dependencies: [success] });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

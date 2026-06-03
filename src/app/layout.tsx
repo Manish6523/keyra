@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "Keyra — Your keys. Your control.",
   description:
     "Store, organize, and access all your API keys in one encrypted vault. Zero-knowledge. Zero leaks. Built for developers who take security seriously.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 }
 
 export default function RootLayout({
