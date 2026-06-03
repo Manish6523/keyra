@@ -24,54 +24,67 @@ function LoginForm() {
   const redirect = searchParams.get("redirect") || "/dashboard";
   const formRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    // Logo entrance
-    gsap.from(".login-logo", {
-      opacity: 0,
-      scale: 0.5,
-      y: -20,
-      duration: 0.7,
-      ease: "back.out(1.7)",
-      delay: 0.2,
-    });
-    // Subtitle
-    gsap.from(".login-subtitle", {
-      opacity: 0,
-      y: 10,
-      filter: "blur(8px)",
-      duration: 0.6,
-      ease: "power3.out",
-      delay: 0.5,
-    });
-    // Card
-    gsap.from(".login-card", {
-      opacity: 0,
-      y: 30,
-      scale: 0.97,
-      duration: 0.7,
-      ease: "power3.out",
-      delay: 0.7,
-    });
-    // Form fields stagger
-    gsap.from(".login-field", {
-      opacity: 0,
-      x: -15,
-      duration: 0.5,
-      stagger: 0.12,
-      ease: "power2.out",
-      delay: 1.0,
-    });
-    // Submit button
-    gsap.from(".login-submit", {
-      opacity: 0,
-      y: 10,
-      duration: 0.5,
-      ease: "power2.out",
-      delay: 1.4,
-    });
-  }, { scope: formRef });
+  // Extract contextSafe to wrap event handlers
+  const { contextSafe } = useGSAP(
+    () => {
+      // Logo entrance
+      gsap.from(".login-logo", {
+        opacity: 0,
+        scale: 0.5,
+        y: -20,
+        duration: 0.7,
+        ease: "back.out(1.7)",
+        delay: 0.2,
+        clearProps: "opacity,transform", // Clears GSAP styles after completion
+      });
+      
+      // Subtitle (The only one showing right now because its delay/render happened to dodge the cycle)
+      gsap.from(".login-subtitle", {
+        opacity: 0,
+        y: 10,
+        filter: "blur(8px)",
+        duration: 0.6,
+        ease: "power3.out",
+        delay: 0.5,
+      });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+      // Card
+      gsap.from(".login-card", {
+        opacity: 0,
+        y: 30,
+        scale: 0.97,
+        duration: 0.7,
+        ease: "power3.out",
+        delay: 0.7,
+        clearProps: "opacity,transform",
+      });
+
+      // Form fields stagger
+      gsap.from(".login-field", {
+        opacity: 0,
+        x: -15,
+        duration: 0.5,
+        stagger: 0.12,
+        ease: "power2.out",
+        delay: 1.0,
+        clearProps: "opacity,transform",
+      });
+
+      // Submit button
+      gsap.from(".login-submit", {
+        opacity: 0,
+        y: 10,
+        duration: 0.5,
+        ease: "power2.out",
+        delay: 1.4,
+        clearProps: "opacity,transform",
+      });
+    },
+    { scope: formRef, dependencies: [] } // Add empty dependency array here to stabilize Strict Mode
+  );
+
+  // Wrap the async handler in contextSafe
+  const handleSubmit = contextSafe(async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -98,7 +111,7 @@ function LoginForm() {
       ease: "power2.in",
       onComplete: () => router.push(redirect),
     });
-  };
+  });
 
   return (
     <div

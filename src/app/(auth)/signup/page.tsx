@@ -24,83 +24,100 @@ export default function SignupPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    if (success) return;
-    gsap.from(".signup-logo", {
-      opacity: 0,
-      scale: 0.5,
-      y: -20,
-      duration: 0.7,
-      ease: "back.out(1.7)",
-      delay: 0.2,
-    });
-    gsap.from(".signup-subtitle", {
-      opacity: 0,
-      y: 10,
-      filter: "blur(8px)",
-      duration: 0.6,
-      ease: "power3.out",
-      delay: 0.5,
-    });
-    gsap.from(".signup-card", {
-      opacity: 0,
-      y: 30,
-      scale: 0.97,
-      duration: 0.7,
-      ease: "power3.out",
-      delay: 0.7,
-    });
-    gsap.from(".signup-field", {
-      opacity: 0,
-      x: -15,
-      duration: 0.5,
-      stagger: 0.12,
-      ease: "power2.out",
-      delay: 1.0,
-    });
-    gsap.from(".signup-submit", {
-      opacity: 0,
-      y: 10,
-      duration: 0.5,
-      ease: "power2.out",
-      delay: 1.4,
-    });
-  }, { scope: formRef, dependencies: [success] });
+  // Form Entrance Animation
+  const { contextSafe } = useGSAP(
+    () => {
+      if (success) return;
+      gsap.from(".signup-logo", {
+        opacity: 0,
+        scale: 0.5,
+        y: -20,
+        duration: 0.7,
+        ease: "back.out(1.7)",
+        delay: 0.2,
+        clearProps: "opacity,transform",
+      });
+      gsap.from(".signup-subtitle", {
+        opacity: 0,
+        y: 10,
+        filter: "blur(8px)",
+        duration: 0.6,
+        ease: "power3.out",
+        delay: 0.5,
+        clearProps: "opacity,transform,filter",
+      });
+      gsap.from(".signup-card", {
+        opacity: 0,
+        y: 30,
+        scale: 0.97,
+        duration: 0.7,
+        ease: "power3.out",
+        delay: 0.7,
+        clearProps: "opacity,transform",
+      });
+      gsap.from(".signup-field", {
+        opacity: 0,
+        x: -15,
+        duration: 0.5,
+        stagger: 0.12,
+        ease: "power2.out",
+        delay: 1.0,
+        clearProps: "opacity,transform",
+      });
+      gsap.from(".signup-submit", {
+        opacity: 0,
+        y: 10,
+        duration: 0.5,
+        ease: "power2.out",
+        delay: 1.4,
+        clearProps: "opacity,transform",
+      });
+    },
+    { scope: formRef, dependencies: [success] }
+  );
 
-  // Success state entrance
-  useGSAP(() => {
-    if (!success) return;
-    gsap.from(".success-icon", {
-      scale: 0,
-      rotation: -180,
-      duration: 0.8,
-      ease: "back.out(1.7)",
-      delay: 0.2,
-    });
-    gsap.from(".success-title", {
-      opacity: 0,
-      y: 15,
-      duration: 0.6,
-      ease: "power3.out",
-      delay: 0.5,
-    });
-    gsap.from(".success-desc", {
-      opacity: 0,
-      y: 10,
-      duration: 0.5,
-      ease: "power3.out",
-      delay: 0.7,
-    });
-    gsap.from(".success-btn", {
-      opacity: 0,
-      y: 10,
-      duration: 0.5,
-      ease: "power3.out",
-      delay: 0.9,
-    });
-  }, { scope: successRef, dependencies: [success] });
+  // Success State Entrance Animation
+  useGSAP(
+    () => {
+      if (!success) return;
+      gsap.from(".success-icon", {
+        scale: 0,
+        rotation: -180,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+        delay: 0.2,
+        clearProps: "transform",
+      });
+      gsap.from(".success-title", {
+        opacity: 0,
+        y: 15,
+        duration: 0.6,
+        ease: "power3.out",
+        delay: 0.5,
+        clearProps: "opacity,transform",
+      });
+      gsap.from(".success-desc", {
+        opacity: 0,
+        y: 10,
+        duration: 0.5,
+        ease: "power3.out",
+        delay: 0.7,
+        clearProps: "opacity,transform",
+      });
+      gsap.from(".success-btn", {
+        opacity: 0,
+        y: 10,
+        duration: 0.5,
+        ease: "power3.out",
+        delay: 0.9,
+        clearProps: "opacity,transform",
+      });
+    },
+    { scope: successRef, dependencies: [success] }
+  );
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Wrap async event handler inside contextSafe
+  const handleSubmit = contextSafe(async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -128,7 +145,7 @@ export default function SignupPage() {
         setLoading(false);
       },
     });
-  };
+  });
 
   if (success) {
     return (
